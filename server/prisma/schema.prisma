@@ -1,0 +1,303 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String?         @unique
+  password      String?
+  name          String?
+  phone         String?
+  address       String?         @db.Text
+  orderComplete Int             @default(0)
+  orderCancel   Int             @default(0)
+  visit         Int             @default(0)
+  link          String?
+  guest         Boolean         @default(true)
+  active        Boolean         @default(true)
+  created       DateTime        @default(now())
+  updated       DateTime        @default(now())
+  store         Store?
+  productRating ProductRating[]
+  cart          Cart?
+
+  @@index([name, phone])
+}
+
+model Admin {
+  id       String   @id @default(uuid())
+  username String   @unique
+  password String
+  name     String
+  created  DateTime @default(now())
+  updated  DateTime @default(now())
+
+  @@index([username, name])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  picture     String
+  description String?   @db.Text
+  active      Boolean   @default(false)
+  created     DateTime  @default(now())
+  updated     DateTime  @default(now())
+  product     Product[]
+
+  @@index([name])
+}
+
+model Banner {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  picture     String   @db.Text
+  big         Boolean
+  active      Boolean  @default(false)
+  created     DateTime @default(now())
+  updated     DateTime @default(now())
+
+  @@index([name])
+}
+
+model Store {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  name        String
+  description String?   @db.Text
+  address     String    @db.Text
+  phone       String
+  lat         String?
+  lng         String?
+  active      Boolean   @default(true)
+  created     DateTime  @default(now())
+  updated     DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  product     Product[]
+
+  @@index([name, active])
+}
+
+model Product {
+  id             String           @id @default(uuid())
+  storeId        String
+  categoryId     String
+  priority       Int              @default(0)
+  name           String
+  description    String           @db.Text
+  picture        String           @db.Text
+  price          Decimal          @db.Decimal(19, 4)
+  sell           Int              @default(0)
+  view           Int              @default(0)
+  rating         Float            @default(0)
+  active         Boolean          @default(true)
+  created        DateTime         @default(now())
+  updated        DateTime         @default(now())
+  category       Category         @relation(fields: [categoryId], references: [id])
+  store          Store            @relation(fields: [storeId], references: [id])
+  productRating  ProductRating[]
+  productGalery  ProductGalery[]
+  productVariant ProductVariant[]
+
+  @@index([storeId, categoryId, name, active])
+}
+
+model ProductVariant {
+  id             String     @id @default(uuid())
+  productId      String
+  name           String
+  stok           Int        @default(0)
+  min            Int?
+  max            Int?
+  price          Decimal    @db.Decimal(19, 4)
+  wholesalePrice Decimal?   @db.Decimal(19, 4)
+  wholesaleMin   Int?
+  unit           String?
+  weight         Float      @default(0)
+  created        DateTime   @default(now())
+  updated        DateTime   @default(now())
+  product        Product    @relation(fields: [productId], references: [id])
+  cartItem       CartItem[]
+
+  @@index([productId])
+}
+
+model ProductGalery {
+  id        String   @id @default(uuid())
+  productId String
+  picture   String   @db.Text
+  created   DateTime @default(now())
+  updated   DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+}
+
+model ProductRating {
+  id          String   @id @default(uuid())
+  userId      String
+  productId   String
+  productName String
+  rating      Int
+  comment     String?  @db.Text
+  created     DateTime @default(now())
+  updated     DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@index([userId, productId, rating])
+}
+
+model Cart {
+  id       String     @id @default(uuid())
+  userId   String     @unique
+  qty      Int
+  total    Decimal    @db.Decimal(19, 4)
+  created  DateTime   @default(now())
+  updated  DateTime   @default(now())
+  user     User       @relation(fields: [userId], references: [id])
+  cartItem CartItem[]
+}
+
+model CartItem {
+  id               String         @id @default(uuid())
+  cartId           String
+  productVariantId String
+  qty              Int
+  total            Decimal        @db.Decimal(19, 4)
+  created          DateTime       @default(now())
+  updated          DateTime       @default(now())
+  cart             Cart           @relation(fields: [cartId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+
+  @@index([cartId, productVariantId])
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  code        String
+  name        String
+  description String
+  picture     String
+  fee         Decimal  @db.Decimal(19, 4)
+  fixed       Boolean  @default(true)
+  active      Boolean  @default(false)
+  created     DateTime @default(now())
+  updated     DateTime @default(now())
+
+  @@index([code, name])
+}
+
+model Order {
+  id              String           @id @default(uuid())
+  invoice         String
+  userId          String
+  userName        String
+  userPhone       String
+  storeId         String
+  storeUserId     String
+  storeName       String
+  storePhone      String
+  paymentId       String
+  paymentName     String
+  paymentPicture  String
+  paymentFee      Decimal          @default(0) @db.Decimal(19, 4)
+  paymentFixed    Boolean          @default(true)
+  adminFee        Decimal          @default(0) @db.Decimal(19, 4)
+  shippingFee     Decimal          @default(0) @db.Decimal(19, 4)
+  productTotal    Decimal          @default(0) @db.Decimal(19, 4)
+  productQty      Int              @default(0)
+  payTotal        Decimal          @default(0) @db.Decimal(19, 4)
+  receiverName    String
+  receiverAddress String           @db.Text
+  receiverPhone   String
+  receiverLat     String?
+  receiverLng     String?
+  statusOrder     Status           @default(PENDING)
+  statusPayment   Status           @default(PENDING)
+  statusShipping  Status           @default(PENDING)
+  created         DateTime         @default(now())
+  updated         DateTime         @default(now())
+  orderItem       OrderItem[]
+  orderStatus     OrderStatus[]
+  paymentStatus   PaymentStatus[]
+  shippingStatus  ShippingStatus[]
+
+  @@index([invoice, userId, userName, userPhone])
+}
+
+model OrderItem {
+  id                  String   @id @default(uuid())
+  orderId             String
+  storeId             String
+  storeUserId         String
+  storeName           String
+  storePhone          String
+  productId           String
+  productName         String
+  productPicture      String
+  productPrice        Decimal  @db.Decimal(19, 4)
+  productUnit         String?
+  productVariantId    String
+  productVariantName  String
+  productVariantUnit  String?
+  productVariantPrice Decimal  @db.Decimal(19, 4)
+  wholesalePrice      Decimal? @db.Decimal(19, 4)
+  wholesaleMin        Int?
+  qty                 Int
+  total               Decimal  @db.Decimal(19, 4)
+  weight              Float    @default(1000)
+  created             DateTime @default(now())
+  updated             DateTime @default(now())
+  order               Order    @relation(fields: [orderId], references: [id])
+
+  @@index([orderId, storeName, productName, productVariantName])
+}
+
+model OrderStatus {
+  id      String   @id @default(uuid())
+  orderId String
+  status  Status   @default(PENDING)
+  note    String?  @db.Text
+  created DateTime @default(now())
+  updated DateTime @default(now())
+  order   Order    @relation(fields: [orderId], references: [id])
+}
+
+model PaymentStatus {
+  id      String   @id @default(uuid())
+  orderId String
+  status  Status   @default(PENDING)
+  note    String?  @db.Text
+  created DateTime @default(now())
+  updated DateTime @default(now())
+  order   Order    @relation(fields: [orderId], references: [id])
+}
+
+model ShippingStatus {
+  id      String   @id @default(uuid())
+  orderId String?
+  status  Status   @default(PENDING)
+  note    String?  @db.Text
+  created DateTime @default(now())
+  updated DateTime @default(now())
+  order   Order?   @relation(fields: [orderId], references: [id])
+}
