@@ -1,3 +1,6 @@
+import multer from "multer";
+import { BadRequest } from "./failure";
+
 export async function delay(value: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, value));
 }
@@ -30,3 +33,23 @@ export function invoice(): string {
 
   return prefix + dateString + randomDigits;
 }
+
+export const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "upload/image/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + ".jpg");
+    },
+  }),
+  fileFilter: (_, file, cb) => {
+    const images = ["image/jpeg", "image/jpg", "image/png"];
+    if (images.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new BadRequest("Hanya gambar yang boleh di upload"));
+    }
+  },
+}).array("picture");

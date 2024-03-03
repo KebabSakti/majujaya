@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-import bcrypt from "bcryptjs";
 import cors from "cors";
 import express from "express";
 import http from "http";
@@ -8,6 +7,7 @@ import { SocketIo } from "./lib/helper/socket-io";
 import adminMiddleware from "./view/middleware/admin-middleware";
 import userMiddleware from "./view/middleware/user-middleware";
 import adminAuthRoute from "./view/route/admin-auth-route";
+import adminBannerRoute from "./view/route/admin-banner-route";
 import userAccountRoute from "./view/route/user-account-route";
 import userAuthRoute from "./view/route/user-auth-route";
 import userBannerRoute from "./view/route/user-banner-route";
@@ -19,8 +19,6 @@ import userProductRatingRoute from "./view/route/user-product-rating-route";
 import userProductRoute from "./view/route/user-product-route";
 import userSalesRoute from "./view/route/user-sales-route";
 import userStoreRoute from "./view/route/user-store-route";
-import adminBannerRoute from "./view/route/admin-banner-route";
-import { prisma } from "./lib/helper/prisma";
 
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +36,7 @@ io.use(async (_, next) => {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("upload"));
 
 //REST API
 app.use("/user/auth", userAuthRoute);
@@ -58,18 +57,8 @@ app.use("/admin/auth", adminAuthRoute);
 app.use("/admin/protected", adminMiddleware);
 app.use("/admin/protected/banner", adminBannerRoute);
 
-app.get("/", async (req, res) => {
-  const hashedPassword = await bcrypt.hash("@dm1N.mjjaya2024", 10);
-
-  const query = await prisma.admin.create({
-    data: {
-      username: "maju.jayaadm2024",
-      password: hashedPassword,
-      name: "Admin Maju Jaya",
-    },
-  });
-
-  res.json(query);
+app.post("/", async (req, res) => {
+  res.json();
 });
 
 // app.get("/user/debug", async (req, res) => {

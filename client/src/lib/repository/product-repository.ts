@@ -34,7 +34,7 @@ export default class ProductRepository {
   async create(param: Record<string, any>): Promise<void> {
     const files = [];
     const formData = new FormData();
-    const uploadUrl = `https://api.cloudinary.com/v1_1/dnyzkgi84/upload`;
+    const uploadUrl = "https://api.cloudinary.com/v1_1/dnyzkgi84/upload";
 
     for (const item of param.files) {
       formData.append("upload_preset", "ml_default");
