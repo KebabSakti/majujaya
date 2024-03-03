@@ -19,6 +19,7 @@ import userProductRatingRoute from "./view/route/user-product-rating-route";
 import userProductRoute from "./view/route/user-product-route";
 import userSalesRoute from "./view/route/user-sales-route";
 import userStoreRoute from "./view/route/user-store-route";
+import adminBannerRoute from "./view/route/admin-banner-route";
 import { prisma } from "./lib/helper/prisma";
 
 const app = express();
@@ -55,6 +56,7 @@ app.use("/user/protected/sales", userSalesRoute);
 //============================================================//
 app.use("/admin/auth", adminAuthRoute);
 app.use("/admin/protected", adminMiddleware);
+app.use("/admin/protected/banner", adminBannerRoute);
 
 app.get("/", async (req, res) => {
   const hashedPassword = await bcrypt.hash("@dm1N.mjjaya2024", 10);

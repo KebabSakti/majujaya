@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 import AdminPage from "./view/admin-page";
 import CartPage from "./view/cart-page";
 import CheckoutPage from "./view/checkout-page";

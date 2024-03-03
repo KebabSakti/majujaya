@@ -3,8 +3,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
-import AdminLoginPage from "./view/page/admin-login-page";
+import Layout from "./view/component/layout";
+import { AuthProvider } from "./view/context/auth-context";
+import CategoryPage from "./view/page/category-page";
+import DashboardPage from "./view/page/dashboard-page";
+import LoginPage from "./view/page/login-page";
+import SettingPage from "./view/page/setting-page";
+import BannerPage from "./view/page/banner-page";
 
 const theme: CustomFlowbiteTheme = {
   carousel: {
@@ -28,15 +35,39 @@ const theme: CustomFlowbiteTheme = {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <AdminLoginPage />,
+    element: <LoginPage />,
+  },
+  {
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        path: "/dashboard",
+        element: <DashboardPage />,
+      },
+      {
+        path: "/banner",
+        element: <BannerPage />,
+      },
+      {
+        path: "/category",
+        element: <CategoryPage />,
+      },
+      {
+        path: "/setting",
+        element: <SettingPage />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Flowbite theme={{ theme: theme }}>
-      <RouterProvider router={router} />
-      <ToastContainer position="top-center" hideProgressBar={false} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <ToastContainer position="top-center" hideProgressBar={false} />
+      </AuthProvider>
     </Flowbite>
   </React.StrictMode>
 );

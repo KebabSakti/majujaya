@@ -55,6 +55,7 @@ export default class ProductRepository {
 
     const payload = { ...param, files: files };
     const queryUrl = urlParser(url.product);
+
     const response = await fetch(queryUrl, {
       method: "POST",
       body: JSON.stringify(payload),

@@ -1,8 +1,14 @@
 import { Spinner } from "flowbite-react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import logo from "../../assets/maju-jaya-alt.png";
+import { Failure } from "../../lib/config/failure";
+import { AuthContext } from "../context/auth-context";
 
-export default function AdminLoginPage() {
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
   const [formValue, setFormValue] = useState({
@@ -19,13 +25,29 @@ export default function AdminLoginPage() {
 
   function submit(e: any) {
     e.preventDefault();
+    login();
+  }
 
+  async function login() {
     try {
       setLoading(true);
+      await authContext!.login(formValue);
     } catch (error) {
-      //
+      setLoading(false);
+
+      if (error instanceof Failure) {
+        toast(error.message);
+      } else {
+        toast("Unknown error has occured");
+      }
     }
   }
+
+  useEffect(() => {
+    if (authContext!.auth != null) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [authContext]);
 
   return (
     <div className="bg-background min-h-screen flex flex-col gap-2 justify-center items-center">
@@ -35,7 +57,7 @@ export default function AdminLoginPage() {
           LOGIN ADMIN
         </div>
       </div>
-      <div className="bg-surface p-4 drop-shadow rounded w-[80%] md:w-[50%] lg:w-[30%]">
+      <div className="bg-surface p-4 drop-shadow rounded w-[80%] md:w-[50%] lg:w-[20%]">
         <div>
           <form onSubmit={submit} className="flex flex-col gap-4">
             <input
