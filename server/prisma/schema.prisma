@@ -302,3 +302,12 @@ model ShippingStatus {
   updated DateTime @default(now())
   order   Order?   @relation(fields: [orderId], references: [id])
 }
+
+model Configuration {
+  id          String   @id
+  name        String
+  value       String?   @db.Text
+  description String?  @db.Text
+  created     DateTime @default(now())
+  updated     DateTime @default(now())
+}

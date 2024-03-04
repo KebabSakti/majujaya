@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Joi from "joi";
 import { BadRequest, Failure } from "../helper/failure";
 import UserOrderRepository from "../repository/user-order-repository";
+import { Whatsapp } from "../helper/whatsapp";
 
 const orderRepository = new UserOrderRepository();
 
@@ -47,6 +48,13 @@ export default class UserOrderController {
 
       const result = await orderRepository.create(param);
 
+      //kirim wa ke toko
+      for (const store of param.stores) {
+        const storePhone = store.storePhone;
+        const storeMessage = `Anda mendapatkan pesanan baru dari ${param.receiverName}, cek detailnya di sini https://majujayashop.com`;
+        await Whatsapp.send(storePhone, storeMessage);
+      }
+
       res.json(result);
     } catch (error: any) {
       Failure.handle(error, res);
@@ -56,6 +64,8 @@ export default class UserOrderController {
   async update(req: Request, res: Response) {
     try {
       await orderRepository.update(req.body);
+
+      console.log(req.body);
 
       res.end();
     } catch (error: any) {

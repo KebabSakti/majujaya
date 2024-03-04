@@ -21,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "../server/src/lib/helper/whatsapp.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

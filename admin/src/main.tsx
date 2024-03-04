@@ -7,11 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import Layout from "./view/component/layout";
 import { AuthProvider } from "./view/context/auth-context";
+import BannerPage from "./view/page/banner-page";
 import CategoryPage from "./view/page/category-page";
+import ConfigPage from "./view/page/config-page";
 import DashboardPage from "./view/page/dashboard-page";
 import LoginPage from "./view/page/login-page";
-import SettingPage from "./view/page/setting-page";
-import BannerPage from "./view/page/banner-page";
 
 const theme: CustomFlowbiteTheme = {
   carousel: {
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/setting",
-        element: <SettingPage />,
+        element: <ConfigPage />,
       },
     ],
   },

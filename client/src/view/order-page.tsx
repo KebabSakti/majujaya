@@ -61,6 +61,7 @@ export default function OrderPage() {
         .update({
           id: selectedOrder?.id,
           statusOrder: "CANCELED",
+          invoice: selectedOrder?.invoice,
           token: authContext?.auth?.token,
         })
         .then((_) => {

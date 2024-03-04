@@ -91,8 +91,8 @@ export default function CategoryPage() {
           <thead>
             <tr>
               {/* <th className="bg-gray-100 text-start p-2">No</th> */}
-              <th className="bg-gray-100 text-start p-2">Nama</th>
-              <th className="bg-gray-100 text-start p-2">Banner</th>
+              <th className="bg-gray-100 text-start p-2">Kategori</th>
+              <th className="bg-gray-100 text-start p-2">Icon</th>
               <th className="bg-gray-100 text-start p-2">Status</th>
               <th className="bg-gray-100 text-start p-2"></th>
             </tr>
