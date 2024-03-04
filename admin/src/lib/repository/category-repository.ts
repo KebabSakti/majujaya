@@ -1,13 +1,13 @@
 import { app } from "../config/app";
 import { Failure } from "../config/failure";
 
-export default class BannerRepository {
+export default class CategoryRepository {
   async index(param: Record<string, any>): Promise<Record<string, any>> {
     const token = param.token;
     delete param.token;
 
     const response = await fetch(
-      `${app.host}/admin/protected/banner?page=${param.page}&limit=${param.limit}`,
+      `${app.host}/admin/protected/category?page=${param.page}&limit=${param.limit}`,
       {
         method: "GET",
         headers: {
@@ -33,7 +33,7 @@ export default class BannerRepository {
     formData.append("status", param.status);
     delete param.token;
 
-    const response = await fetch(app.host + "/admin/protected/banner", {
+    const response = await fetch(app.host + "/admin/protected/category", {
       method: "POST",
       body: formData,
       headers: {
@@ -59,7 +59,7 @@ export default class BannerRepository {
     delete param.token;
 
     const response = await fetch(
-      app.host + "/admin/protected/banner/" + param.id,
+      app.host + "/admin/protected/category/" + param.id,
       {
         method: "PUT",
         body: formData,
@@ -79,7 +79,7 @@ export default class BannerRepository {
     delete param.token;
 
     const response = await fetch(
-      app.host + "/admin/protected/banner/" + param.id,
+      app.host + "/admin/protected/category/" + param.id,
       {
         method: "DELETE",
         headers: {

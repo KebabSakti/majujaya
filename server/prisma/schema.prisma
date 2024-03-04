@@ -60,6 +60,7 @@ model Category {
   active      Boolean   @default(false)
   created     DateTime  @default(now())
   updated     DateTime  @default(now())
+  deleted     DateTime?
   product     Product[]
 
   @@index([name])

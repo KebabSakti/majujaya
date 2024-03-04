@@ -1,6 +1,5 @@
 import express from "express";
 import AdminBannerController from "../../lib/controller/admin-banner-controller";
-import { upload } from "../../lib/helper/common";
 
 const router = express.Router();
 const adminBannerController = new AdminBannerController();

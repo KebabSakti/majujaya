@@ -8,6 +8,7 @@ import adminMiddleware from "./view/middleware/admin-middleware";
 import userMiddleware from "./view/middleware/user-middleware";
 import adminAuthRoute from "./view/route/admin-auth-route";
 import adminBannerRoute from "./view/route/admin-banner-route";
+import adminCategoryRoute from "./view/route/admin-category-route";
 import userAccountRoute from "./view/route/user-account-route";
 import userAuthRoute from "./view/route/user-auth-route";
 import userBannerRoute from "./view/route/user-banner-route";
@@ -56,6 +57,7 @@ app.use("/user/protected/sales", userSalesRoute);
 app.use("/admin/auth", adminAuthRoute);
 app.use("/admin/protected", adminMiddleware);
 app.use("/admin/protected/banner", adminBannerRoute);
+app.use("/admin/protected/category", adminCategoryRoute);
 
 app.post("/", async (req, res) => {
   res.json();

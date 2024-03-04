@@ -97,7 +97,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="font-semibold text-end">
-                <div className="text-xl text-red-500">Rp 1.000.000.000</div>
+                <div className="text-xl text-green-400">Rp 1.000.000.000</div>
                 <div className="text-sm">20000 Produk</div>
               </div>
             </div>

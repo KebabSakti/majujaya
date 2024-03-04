@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import Joi from "joi";
 import { upload } from "../helper/common";
 import { BadRequest, Failure } from "../helper/failure";
-import AdminBannerRepository from "../repository/admin-banner-repository";
+import AdminCategoryRepository from "../repository/admin-category-repository";
 
-const adminBannerRepository = new AdminBannerRepository();
+const adminCategoryRepository = new AdminCategoryRepository();
 
-export default class AdminBannerController {
+export default class AdminCategoryController {
   async index(req: Request, res: Response) {
     try {
       const schema = Joi.object({
@@ -20,7 +20,7 @@ export default class AdminBannerController {
         throw new BadRequest(error.message);
       }
 
-      const result = await adminBannerRepository.index(req.query);
+      const result = await adminCategoryRepository.index(req.query);
 
       res.json(result);
     } catch (error: any) {
@@ -53,7 +53,7 @@ export default class AdminBannerController {
           (req.files as any)[0].filename
         }`;
 
-        await adminBannerRepository.create({
+        await adminCategoryRepository.create({
           ...req.body,
           picture: fileUrl,
         });
@@ -95,7 +95,7 @@ export default class AdminBannerController {
           param.picture = fileUrl;
         }
 
-        await adminBannerRepository.update(param);
+        await adminCategoryRepository.update(param);
 
         res.end();
       } catch (error: any) {
@@ -106,7 +106,7 @@ export default class AdminBannerController {
 
   async delete(req: Request, res: Response) {
     try {
-      const result = await adminBannerRepository.delete({ id: req.params.id });
+      const result = await adminCategoryRepository.delete({ id: req.params.id });
 
       res.json(result);
     } catch (error: any) {

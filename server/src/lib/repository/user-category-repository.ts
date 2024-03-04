@@ -5,7 +5,7 @@ import { prisma } from "../helper/prisma";
 export default class UserCategoryRepository {
   async read(): Promise<Result<CategoryModel[]>> {
     const result = await prisma.category.findMany({
-      where: { active: true },
+      where: { active: true, deleted: null },
       orderBy: {
         name: "asc",
       },

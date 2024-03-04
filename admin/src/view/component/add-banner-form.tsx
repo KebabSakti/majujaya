@@ -15,6 +15,7 @@ export default function AddBannerForm() {
   const [formValue, setFormValue] = useState<Record<string, any>>({
     name: "",
     picture: null,
+    status: "inactive",
   });
 
   function change(e: any) {
@@ -89,6 +90,31 @@ export default function AddBannerForm() {
               ref={fileRef}
               onChange={change}
             />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 md:gap-4 md:flex-row md:items-center">
+          <div className="md:shrink-0 md:w-28">Status</div>
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="status"
+                value="active"
+                checked={formValue.status == "active"}
+                onChange={change}
+              />
+              <div>Aktif</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="status"
+                value="inactive"
+                checked={formValue.status == "inactive"}
+                onChange={change}
+              />
+              <div>Non Aktif</div>
+            </div>
           </div>
         </div>
         <button

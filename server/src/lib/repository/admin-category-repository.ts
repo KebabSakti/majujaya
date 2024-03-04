@@ -1,11 +1,13 @@
-import fs from "node:fs";
 import { prisma } from "../helper/prisma";
 
-export default class AdminBannerRepository {
+export default class AdminCategoryRepository {
   async index(param: Record<string, any>): Promise<Record<string, any>> {
     const skip = (param.page - 1) * param.limit;
 
-    const result = await prisma.banner.findMany({
+    const result = await prisma.category.findMany({
+      where: {
+        deleted: null,
+      },
       orderBy: {
         created: "desc",
       },
@@ -21,20 +23,19 @@ export default class AdminBannerRepository {
   }
 
   async create(param: Record<string, any>): Promise<void> {
-    await prisma.banner.create({
+    await prisma.category.create({
       data: {
         id: param.id,
         name: param.name,
         description: param.description,
         picture: param.picture,
-        big: true,
         active: param.status == "active",
       },
     });
   }
 
   async update(param: Record<string, any>): Promise<void> {
-    await prisma.banner.update({
+    await prisma.category.update({
       where: { id: param.id },
       data: {
         name: param.name,
@@ -46,26 +47,11 @@ export default class AdminBannerRepository {
   }
 
   async delete(param: Record<string, any>): Promise<void> {
-    await prisma.$transaction(async (tx) => {
-      const banner = await tx.banner.findFirst({ where: { id: param.id } });
-
-      if (banner) {
-        const filename = banner.picture.substring(
-          banner.picture.lastIndexOf("/") + 1
-        );
-
-        const path = "upload/image/" + filename;
-
-        fs.stat(path, async (err) => {
-          if (!err) {
-            fs.unlinkSync("upload/image/" + filename);
-          }
-        });
-
-        await tx.banner.delete({
-          where: { id: param.id },
-        });
-      }
+    await prisma.category.update({
+      where: { id: param.id },
+      data: {
+        deleted: new Date(),
+      },
     });
   }
 }
