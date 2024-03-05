@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Modal, Spinner } from "flowbite-react";
 import { useContext, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -237,8 +238,8 @@ export default function OrderPage() {
                           {e.storeName}
                         </div>
                       </div>
-                      <div className="flex gap-4">
-                        <div className="size-14">
+                      <div className="flex gap-4 text-start">
+                        <div className="size-14 shrink-0">
                           <LazyLoadImage
                             src={e.orderItem![0].productPicture}
                             className="w-full h-full object-cover rounded bg-gray-200"
@@ -265,11 +266,7 @@ export default function OrderPage() {
                         <div className="flex justify-between items-center text-sm">
                           <div className="text-gray-500">Tanggal</div>
                           <div>
-                            {new Date(e.created!).toLocaleDateString("id-ID", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                            {dayjs(e.created!).format("DD MMM YY hh:mm:ss A")}
                           </div>
                         </div>
                         <div className="flex justify-between items-center text-sm">
@@ -355,16 +352,9 @@ export default function OrderPage() {
                                     Waktu Pesanan
                                   </div>
                                   <div>
-                                    {new Date(
-                                      order.created!
-                                    ).toLocaleDateString("id-ID", {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                      hour: "numeric",
-                                      minute: "numeric",
-                                      second: "numeric",
-                                    })}
+                                    {dayjs(order.created!).format(
+                                      "DD MMM YY hh:mm:ss A"
+                                    )}
                                   </div>
                                 </div>
                                 <div>
@@ -419,7 +409,7 @@ export default function OrderPage() {
                                           return (
                                             <div key={i} className="py-4">
                                               <div className="flex gap-4">
-                                                <div className="bg-gray-100 w-16 h-16 mt-2">
+                                                <div className="bg-gray-100 w-16 h-16 mt-2 shrink-0">
                                                   <LazyLoadImage
                                                     src={e.productPicture}
                                                     alt=""

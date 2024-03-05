@@ -77,10 +77,11 @@ export default function ProductMangementPage() {
     try {
       setLoading(true);
       await productRepository.create(input);
-      setModal(false);
-      setLoading(false);
-      getData();
-      toast("Proses berhasil, produk telah ditambahkan");
+      window.location.reload();
+      // setModal(false);
+      // setLoading(false);
+      // getData();
+      // toast("Proses berhasil, produk telah ditambahkan");
     } catch (error: any) {
       console.error(error);
       toast("Terjadi kesalahan, coba beberapa saat lagi");
@@ -287,7 +288,7 @@ export default function ProductMangementPage() {
                     return (
                       <div
                         key={i}
-                        className="border w-full h-56 flex flex-col overflow-hidden cursor-pointer"
+                        className="border w-full h-64 flex flex-col overflow-hidden cursor-pointer"
                         onClick={() => {
                           getProductDetail(e.id!);
                         }}

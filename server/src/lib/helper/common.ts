@@ -34,6 +34,23 @@ export function invoice(): string {
   return prefix + dateString + randomDigits;
 }
 
+export function convertToValidPhoneNumber(phoneNumber: string) {
+  // Check if the phone number already starts with '+62' or '62'
+  if (phoneNumber.startsWith("+62") || phoneNumber.startsWith("62")) {
+    // Phone number is already valid
+    return phoneNumber;
+  }
+
+  // Check if the phone number starts with '0'
+  if (phoneNumber.startsWith("0")) {
+    // Remove the leading '0' and prepend '62'
+    return "62" + phoneNumber.substring(1);
+  }
+
+  // Add '62' prefix to the phone number
+  return "62" + phoneNumber;
+}
+
 export const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {

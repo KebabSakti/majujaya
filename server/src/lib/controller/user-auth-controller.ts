@@ -3,6 +3,7 @@ import Joi from "joi";
 import { BadRequest, Failure } from "../helper/failure";
 import UserRepository from "../repository/user-account-repository";
 import UserAuthRepository from "../repository/user-auth-repository";
+import { convertToValidPhoneNumber } from "../helper/common";
 
 const userAuthRepository = new UserAuthRepository();
 const userRepository = new UserRepository();
@@ -46,6 +47,7 @@ export default class UserAuthController {
         throw new BadRequest(error.message);
       }
 
+      req.body.phone = convertToValidPhoneNumber(req.body.phone);
       const result = await userRepository.create(req.body);
       delete result.data?.password;
 

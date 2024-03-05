@@ -21,7 +21,7 @@ export default class UserSalesRepository {
         where: {
           statusOrder: "COMPLETED",
           storeId: param.storeId,
-          updated: {
+          created: {
             gte: param.startDate + "T00:00:00.000Z",
             lte: param.endDate + "T23:59:59.999Z",
           },

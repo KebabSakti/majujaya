@@ -3,14 +3,15 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
+import "./index.css";
 import AdminPage from "./view/admin-page";
 import CartPage from "./view/cart-page";
 import CheckoutPage from "./view/checkout-page";
 import Layout from "./view/component/layout";
 import { AuthProvider } from "./view/context/auth-context";
 import { CartProvider } from "./view/context/cart-context";
+import { ConfigProvider } from "./view/context/config-context";
 import DebugPage from "./view/debug-page";
 import ErrorPage from "./view/error-page";
 import HomePage from "./view/home-page";
@@ -86,12 +87,14 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <AuthProvider>
-        <CartProvider>
-          <RouterProvider router={router} />
-          <ToastContainer position="top-center" hideProgressBar={false} />
-        </CartProvider>
-      </AuthProvider>
+      <ConfigProvider>
+        <AuthProvider>
+          <CartProvider>
+            <RouterProvider router={router} />
+            <ToastContainer position="top-center" hideProgressBar={false} />
+          </CartProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </Provider>
   </React.StrictMode>
 );

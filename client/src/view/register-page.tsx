@@ -85,15 +85,20 @@ export default function RegisterPage() {
             value={input.name}
             onChange={inputOnChange}
           />
-          <input
-            type="text"
-            placeholder="No HP"
-            name="phone"
-            required
-            className="border-gray-200 rounded w-full"
-            value={input.phone}
-            onChange={inputOnChange}
-          />
+          <div className="flex flex-col gap-1">
+            <input
+              type="text"
+              placeholder="No Whatsapp"
+              name="phone"
+              required
+              className="border-gray-200 rounded w-full"
+              value={input.phone}
+              onChange={inputOnChange}
+            />
+            <div className="text-red-500 text-xs">
+              * Gunakan no whatsapp aktif
+            </div>
+          </div>
           <button
             className="bg-primary text-onPrimary font-semibold p-2 disabled:bg-gray-300"
             disabled={loading}

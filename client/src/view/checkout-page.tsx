@@ -187,15 +187,20 @@ export default function CheckoutPage() {
                       value={input.receiverName}
                       onChange={inputOnChange}
                     />
-                    <input
-                      type="text"
-                      placeholder="No WA"
-                      name="receiverPhone"
-                      required
-                      className="border-gray-200 rounded w-full"
-                      value={input.receiverPhone}
-                      onChange={inputOnChange}
-                    />
+                    <div className="flex flex-col gap-1">
+                      <input
+                        type="text"
+                        placeholder="No Whatsapp"
+                        name="receiverPhone"
+                        required
+                        className="border-gray-200 rounded w-full"
+                        value={input.receiverPhone}
+                        onChange={inputOnChange}
+                      />
+                      <div className="text-red-500 text-xs">
+                        * Gunakan no whatsapp aktif
+                      </div>
+                    </div>
                     <textarea
                       placeholder="Alamat"
                       name="receiverAddress"
@@ -239,7 +244,7 @@ export default function CheckoutPage() {
                                 return (
                                   <div key={i} className="py-6">
                                     <div className="flex gap-4">
-                                      <div className="bg-gray-100 w-16 h-16 mt-2">
+                                      <div className="bg-gray-100 w-16 h-16 mt-1 shrink-0">
                                         <LazyLoadImage
                                           src={e.productPicture}
                                           alt=""
@@ -251,7 +256,9 @@ export default function CheckoutPage() {
                                         <div className="text-xs text-gray-400">
                                           Varian : {e.productVariantName}
                                         </div>
-                                        <div>Jumlah : {e.qty}</div>
+                                        <div className="mt-2">
+                                          Jumlah : {e.qty}
+                                        </div>
                                         <div className="font-semibold flex gap-1 items-center">
                                           <div>{currency(e.total!)}</div>
                                           {(() => {

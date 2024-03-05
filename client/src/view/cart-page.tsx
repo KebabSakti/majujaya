@@ -44,7 +44,7 @@ export default function CartPage() {
                         </div>
                       </div>
                       <div className="flex gap-4">
-                        <div className="bg-gray-100 w-24 h-24 mt-2">
+                        <div className="bg-gray-100 w-24 h-24 mt-2 shrink-0">
                           <LazyLoadImage
                             src={e.productVariant?.product?.picture}
                             alt=""

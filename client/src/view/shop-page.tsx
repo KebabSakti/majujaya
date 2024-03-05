@@ -11,6 +11,7 @@ import ModalLoading from "./component/modal-loading";
 import ModalPrompt from "./component/modal-prompt";
 import StatusBadge from "./component/status-badge";
 import { AuthContext } from "./context/auth-context";
+import dayjs from "dayjs";
 
 const orderRepository = new OrderRepository();
 
@@ -53,23 +54,26 @@ export default function ShopPage() {
     }
   }
 
-  function updateOrder(status: string) {
+  async function updateOrder(status: string) {
     try {
       setUpdateLoading(true);
 
-      orderRepository
-        .update({
-          id: selectedOrder?.id,
-          statusOrder: status,
-          token: authContext?.auth?.token,
-        })
-        .then((_) => {
-          setPrompt(false);
-          setSelectedOrder(null);
-          setUpdateLoading(false);
-          getOrders();
-          toast("Proses berhasil, pesanan ter update");
-        });
+      await orderRepository.update({
+        id: selectedOrder?.id,
+        statusOrder: status,
+        invoice: selectedOrder?.invoice,
+        token: authContext?.auth?.token,
+      });
+
+      window.location.reload();
+
+      // .then((_) => {
+      //   setPrompt(false);
+      //   setSelectedOrder(null);
+      //   setUpdateLoading(false);
+      //   getOrders();
+      //   toast("Proses berhasil, pesanan ter update");
+      // });
     } catch (error: any) {
       setPrompt(false);
       setUpdateLoading(false);
@@ -245,13 +249,13 @@ export default function ShopPage() {
                         </div>
                       </div>
                       <div className="flex gap-4">
-                        <div className="size-14">
+                        <div className="size-14 shrink-0">
                           <LazyLoadImage
                             src={e.orderItem![0].productPicture}
                             className="w-full h-full object-cover rounded bg-gray-200"
                           />
                         </div>
-                        <div className="flex flex-col items-start">
+                        <div className="flex flex-col items-start text-start">
                           <div className="text-sm line-clamp-1">
                             {e.orderItem![0].productName}
                           </div>
@@ -272,11 +276,7 @@ export default function ShopPage() {
                         <div className="flex justify-between items-center text-sm">
                           <div className="text-gray-500">Tanggal</div>
                           <div>
-                            {new Date(e.created!).toLocaleDateString("id-ID", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                            {dayjs(e.created!).format("DD MMM YY hh:mm:ss A")}
                           </div>
                         </div>
                         <div className="flex justify-between items-center text-sm">
@@ -348,16 +348,9 @@ export default function ShopPage() {
                                     Waktu Pesanan
                                   </div>
                                   <div>
-                                    {new Date(
-                                      order.created!
-                                    ).toLocaleDateString("id-ID", {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                      hour: "numeric",
-                                      minute: "numeric",
-                                      second: "numeric",
-                                    })}
+                                    {dayjs(order.created!).format(
+                                      "DD MMM YY hh:mm:ss A"
+                                    )}
                                   </div>
                                 </div>
                                 <div>
@@ -412,7 +405,7 @@ export default function ShopPage() {
                                           return (
                                             <div key={i} className="py-4">
                                               <div className="flex gap-4">
-                                                <div className="bg-gray-100 w-16 h-16 mt-2">
+                                                <div className="bg-gray-100 w-16 h-16 mt-2 shrink-0">
                                                   <LazyLoadImage
                                                     src={e.productPicture}
                                                     alt=""

@@ -146,7 +146,9 @@ export default function ProductDetailPage() {
           </div>
           <div className="bg-surface p-4 flex flex-col gap-2 text-onSurface">
             <div className="text-xl font-semibold">Deskripsi</div>
-            <div>{nl2br(product.description ?? "")}</div>
+            <div className="whitespace-pre-line">
+              {product.description ?? ""}
+            </div>
           </div>
           <ProductRatingComponent productId={product.id!} />
         </div>

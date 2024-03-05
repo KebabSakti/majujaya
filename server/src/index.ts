@@ -1,9 +1,11 @@
 require("dotenv").config();
 
 import cors from "cors";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import express from "express";
 import http from "http";
-import { prisma } from "./lib/helper/prisma";
 import { SocketIo } from "./lib/helper/socket-io";
 import { Whatsapp } from "./lib/helper/whatsapp";
 import adminMiddleware from "./view/middleware/admin-middleware";
@@ -18,12 +20,16 @@ import userAuthRoute from "./view/route/user-auth-route";
 import userBannerRoute from "./view/route/user-banner-route";
 import userCartRoute from "./view/route/user-cart-route";
 import userCategoryRoute from "./view/route/user-category-route";
+import userConfigRoute from "./view/route/user-config-route";
 import userOrderRoute from "./view/route/user-order-route";
 import userPaymentRoute from "./view/route/user-payment-route";
 import userProductRatingRoute from "./view/route/user-product-rating-route";
 import userProductRoute from "./view/route/user-product-route";
 import userSalesRoute from "./view/route/user-sales-route";
 import userStoreRoute from "./view/route/user-store-route";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const app = express();
 const server = http.createServer(app);
@@ -53,6 +59,7 @@ app.use("/user/category", userCategoryRoute);
 app.use("/user/product", userProductRoute);
 app.use("/user/product-rating", userProductRatingRoute);
 app.use("/user/payment", userPaymentRoute);
+app.use("/user/config", userConfigRoute);
 //============================================================//
 app.use("/user/protected", userMiddleware);
 app.use("/user/protected/account", userAccountRoute);
@@ -68,26 +75,33 @@ app.use("/admin/protected/category", adminCategoryRoute);
 app.use("/admin/protected/config", adminConfigRoute);
 app.use("/admin/protected/wa", adminWaRoute);
 
-app.post("/", async (req, res) => {
-  await prisma.configuration.createMany({
-    data: [
-      {
-        id: "whatsapp",
-        name: "Whatsapp Admin",
-        description:
-          "Nomor ini digunakan oleh sistem untuk mengirim wa otomatis ke user",
-      },
-      {
-        id: "store",
-        name: "User Buka Toko",
-        description:
-          "Aktifkan agar seluruh user yang mendaftar dapat membuka toko dan berjualan pada aplikasi",
-        value: "Tidak",
-      },
-    ],
-  });
+app.get("/", async (req, res) => {
+  const start = "2024-03-04T16:10:33.367Z";
+  const data = dayjs(start).format();
 
-  res.json();
+  // const startDate = "2024-03-04";
+  // const endDate = "2024-03-05";
+
+  // const data = await prisma.order.findMany({
+  //   select: {
+  //     invoice: true,
+  //     userName: true,
+  //     statusOrder: true,
+  //     created: true,
+  //   },
+  //   where: {
+  //     statusOrder: "COMPLETED",
+  //     created: {
+  //       gte: startDate + "T00:00:00.000Z",
+  //       lte: endDate + "T23:59:59.999Z",
+  //     },
+  //   },
+  //   orderBy: {
+  //     created: "desc",
+  //   },
+  // });
+
+  res.json(data);
 });
 
 //route not found 404

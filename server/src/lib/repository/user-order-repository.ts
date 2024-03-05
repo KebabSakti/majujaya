@@ -100,6 +100,16 @@ export default class UserOrderRepository {
     return result;
   }
 
+  async show(param: Record<string, any>): Promise<Record<string, any>> {
+    const order = await prisma.order.findFirst({ where: { id: param.id } });
+
+    const data = {
+      data: order,
+    };
+
+    return data;
+  }
+
   async create(param: Record<string, any>): Promise<Result<OrderModel>> {
     const result = await prisma.$transaction(async (tx) => {
       await Promise.all(
@@ -173,6 +183,8 @@ export default class UserOrderRepository {
         },
         data: {
           statusOrder: param.statusOrder,
+          statusPayment: param.statusOrder,
+          statusShipping: param.statusOrder,
           updated: new Date(),
         },
       });
