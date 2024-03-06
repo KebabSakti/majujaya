@@ -82,6 +82,13 @@ class UserOrderRepository {
         });
         return result;
     }
+    async show(param) {
+        const order = await prisma_1.prisma.order.findFirst({ where: { id: param.id } });
+        const data = {
+            data: order,
+        };
+        return data;
+    }
     async create(param) {
         const result = await prisma_1.prisma.$transaction(async (tx) => {
             await Promise.all(await param.stores.map(async (store) => {
@@ -149,6 +156,8 @@ class UserOrderRepository {
                 },
                 data: {
                     statusOrder: param.statusOrder,
+                    statusPayment: param.statusOrder,
+                    statusShipping: param.statusOrder,
                     updated: new Date(),
                 },
             });

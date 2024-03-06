@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_1 = require("../helper/prisma");
-class UserCategoryRepository {
-    async read() {
-        const result = await prisma_1.prisma.category.findMany({
-            where: { active: true, deleted: null },
+class UserConfigRepository {
+    async index() {
+        const result = await prisma_1.prisma.configuration.findMany({
+            skip: 0,
+            take: 10,
             orderBy: {
                 name: "asc",
             },
@@ -15,4 +16,4 @@ class UserCategoryRepository {
         return data;
     }
 }
-exports.default = UserCategoryRepository;
+exports.default = UserConfigRepository;

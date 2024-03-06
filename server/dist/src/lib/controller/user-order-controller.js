@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
 const failure_1 = require("../helper/failure");
 const user_order_repository_1 = __importDefault(require("../repository/user-order-repository"));
+const whatsapp_1 = require("../helper/whatsapp");
+const common_1 = require("../helper/common");
 const orderRepository = new user_order_repository_1.default();
 class UserOrderController {
     async read(req, res) {
@@ -38,9 +40,15 @@ class UserOrderController {
                 ...req.body,
                 userId: user.id,
                 userName: user.name,
-                userPhone: user.phone,
+                userPhone: (0, common_1.convertToValidPhoneNumber)(user.phone),
             };
             const result = await orderRepository.create(param);
+            //kirim wa ke toko
+            for (const store of param.stores) {
+                const storePhone = store.storePhone;
+                const storeMessage = `Anda mendapatkan pesanan baru dari ${param.receiverName}, cek detailnya di sini https://majujayashop.com`;
+                await whatsapp_1.Whatsapp.send(storePhone, storeMessage);
+            }
             res.json(result);
         }
         catch (error) {
@@ -50,6 +58,17 @@ class UserOrderController {
     async update(req, res) {
         try {
             await orderRepository.update(req.body);
+            const order = await orderRepository.show({ id: req.body.id });
+            const status = req.body.statusOrder;
+            if (status === "CANCELED") {
+                await whatsapp_1.Whatsapp.send(order.data.storePhone, `Pesanan dengan nomor ${order.data.invoice} di batalkan oleh pembeli`);
+            }
+            if (status == "ACTIVE") {
+                await whatsapp_1.Whatsapp.send(order.data.userPhone, `Pesanan dengan nomor ${order.data.invoice} telah diterima oleh toko, pihak toko akan segera menghubungi anda`);
+            }
+            if (status == "COMPLETED") {
+                await whatsapp_1.Whatsapp.send(order.data.userPhone, `Pesanan dengan nomor ${order.data.invoice} telah selesai, terimakasih telah berbelanja di https://majujayashop.com`);
+            }
             res.end();
         }
         catch (error) {

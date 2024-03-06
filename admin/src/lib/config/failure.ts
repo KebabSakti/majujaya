@@ -27,5 +27,7 @@ export class Failure extends Error {
     this.code = code;
     this.note = errMsg;
     Object.setPrototypeOf(this, Failure.prototype);
+
+    console.log(this);
   }
 }

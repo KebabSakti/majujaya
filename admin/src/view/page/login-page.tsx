@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (authContext!.auth != null) {
-      navigate("/dashboard", { replace: true });
+      navigate("/banner", { replace: true });
     }
   }, [authContext]);
 

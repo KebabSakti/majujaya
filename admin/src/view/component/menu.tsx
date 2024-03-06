@@ -7,7 +7,7 @@ export default function Menu() {
 
   return (
     <>
-      <Link to="/dashboard" className="flex items-center justify-between">
+      {/* <Link to="/dashboard" className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +39,7 @@ export default function Menu() {
             d="m8.25 4.5 7.5 7.5-7.5 7.5"
           />
         </svg>
-      </Link>
+      </Link> */}
       <Link to="/banner" className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <svg

@@ -75,35 +75,6 @@ app.use("/admin/protected/category", adminCategoryRoute);
 app.use("/admin/protected/config", adminConfigRoute);
 app.use("/admin/protected/wa", adminWaRoute);
 
-app.get("/", async (req, res) => {
-  const start = "2024-03-04T16:10:33.367Z";
-  const data = dayjs(start).format();
-
-  // const startDate = "2024-03-04";
-  // const endDate = "2024-03-05";
-
-  // const data = await prisma.order.findMany({
-  //   select: {
-  //     invoice: true,
-  //     userName: true,
-  //     statusOrder: true,
-  //     created: true,
-  //   },
-  //   where: {
-  //     statusOrder: "COMPLETED",
-  //     created: {
-  //       gte: startDate + "T00:00:00.000Z",
-  //       lte: endDate + "T23:59:59.999Z",
-  //     },
-  //   },
-  //   orderBy: {
-  //     created: "desc",
-  //   },
-  // });
-
-  res.json(data);
-});
-
 //route not found 404
 app.use("*", (_, res) => res.status(404).json("Route path not found"));
 

@@ -7,6 +7,7 @@ const joi_1 = __importDefault(require("joi"));
 const failure_1 = require("../helper/failure");
 const user_account_repository_1 = __importDefault(require("../repository/user-account-repository"));
 const user_auth_repository_1 = __importDefault(require("../repository/user-auth-repository"));
+const common_1 = require("../helper/common");
 const userAuthRepository = new user_auth_repository_1.default();
 const userRepository = new user_account_repository_1.default();
 class UserAuthController {
@@ -41,6 +42,7 @@ class UserAuthController {
             if (error) {
                 throw new failure_1.BadRequest(error.message);
             }
+            req.body.phone = (0, common_1.convertToValidPhoneNumber)(req.body.phone);
             const result = await userRepository.create(req.body);
             delete result.data?.password;
             res.json(result);

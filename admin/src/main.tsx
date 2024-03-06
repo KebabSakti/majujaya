@@ -10,7 +10,6 @@ import { AuthProvider } from "./view/context/auth-context";
 import BannerPage from "./view/page/banner-page";
 import CategoryPage from "./view/page/category-page";
 import ConfigPage from "./view/page/config-page";
-import DashboardPage from "./view/page/dashboard-page";
 import LoginPage from "./view/page/login-page";
 
 const theme: CustomFlowbiteTheme = {
@@ -40,12 +39,13 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
+      // {
+      //   index: true,
+      //   path: "/dashboard",
+      //   element: <DashboardPage />,
+      // },
       {
         index: true,
-        path: "/dashboard",
-        element: <DashboardPage />,
-      },
-      {
         path: "/banner",
         element: <BannerPage />,
       },
